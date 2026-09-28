@@ -33,23 +33,38 @@ The database is organized into the following main tables:
 
 The `incidentoffense` table supports the many-to-many relationship between incidents and offenses.
 
-## Database Design
+## Database Normalization
 
-The original dataset contained repeated information across incident records.
+The original dataset stored incident, offense, location, agency, district, and place information together in a largely denormalized format. This resulted in repeated values across records and made the data more difficult to maintain.
 
-To reduce redundancy and improve data integrity, the data was separated into related tables using database normalization principles.
+The schema was progressively normalized to reduce redundancy and improve data integrity.
 
-Examples include:
+### First Normal Form (1NF)
 
-- Separating agency information from individual incidents
-- Separating location and district information
-- Separating offense information from incidents
-- Using foreign keys to connect related records
-- Creating a junction table for the many-to-many relationship between incidents and offenses
+The data was reorganized so that attributes contained atomic values and individual incidents could be uniquely identified. Offense information was separated from the main incident record.
 
-More information about the normalization process can be found in:
+### Second Normal Form (2NF)
 
-`docs/normalization.md`
+Repeated location and offense information was moved into separate tables. The `incident` table began referencing related records using foreign keys instead of storing repeated descriptive values.
+
+### Third Normal Form (3NF)
+
+Additional entities such as agencies, police districts, and place types were separated into their own tables. This reduced transitive dependencies and created the final normalized relational structure.
+
+The final design uses:
+
+- Primary keys to uniquely identify records
+- Foreign keys to connect related tables
+- A junction table to represent the many-to-many relationship between incidents and offenses
+- Separate entity tables for agencies, districts, locations, offenses, and place types
+
+### Normalization Process
+
+![Database Normalization Process](docs/normalization-process.png)
+
+A more detailed explanation of the normalization process can be found in:
+
+[`docs/normalization.md`](docs/normalization.md)
 
 ## ER Diagram
 
@@ -66,15 +81,17 @@ Examples include:
 - Addresses with above-average crime counts
 - Cases handled by agency and city
 - Victims by crime category
+- Most common offense types
+- Incident trends over time
 
 These queries can be found in:
 
-`queries.sql`
+[`queries.sql`](queries.sql)
 
 ## Repository Structure
 
 ```text
-2023MoCoPoliceDatabase/
+2023MontgomeryCountyPoliceCrimeDatabase/
 │
 ├── README.md
 ├── schema.sql
@@ -82,4 +99,5 @@ These queries can be found in:
 ├── ERD.png
 │
 └── docs/
-    └── normalization.md
+    ├── normalization.md
+    └── normalization-process.png
