@@ -60,7 +60,7 @@ The final design uses:
 
 ### Normalization Process
 
-![Database Normalization Process](docs/normalization.png))
+![Database Normalization Process](docsnormalization.png)
 
 A more detailed explanation of the normalization process can be found in:
 
